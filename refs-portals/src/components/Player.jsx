@@ -1,19 +1,21 @@
-import { useRef, useState } from "react";
+import { useState, useRef } from "react";
 
 export default function Player() {
-  const playerName = useRef(""); //자바스크립트객체이며 항상참조값을 가지고있음.
-  const [enName, setEnName] = useState(false);
+  const playerName = useRef();
 
-  function handleClcick() {
-    setEnName(playerName.current.value);
+  const [enteredPlayerName, setEnteredPlayerName] = useState(null);
+
+  function handleClick() {
+    setEnteredPlayerName(playerName.current.value);
     playerName.current.value = "";
   }
+
   return (
     <section id="player">
-      <h2>Welcome {enName ?? "unknown name"}</h2>
+      <h2>Welcome {enteredPlayerName ?? "unknown entity"}</h2>
       <p>
         <input ref={playerName} type="text" />
-        <button onClick={handleClcick}>Set Name</button>
+        <button onClick={handleClick}>Set Name</button>
       </p>
     </section>
   );
