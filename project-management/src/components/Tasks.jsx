@@ -1,38 +1,30 @@
-import React from "react";
-import CustomInput from "./CustomInput";
+import NewTask from "./NewTask.jsx";
 
-function Tasks({ item, task }) {
+export default function Tasks({ tasks, onAdd, onDelete }) {
   return (
-    <section className="flex flex-col gap-2 px-2">
-      <div className="">
-        <p>{item.tit}</p>
-        <button className="ml-auto" onClick={() => {}}>
-          Delete
-        </button>
-      </div>
-      <p>{item.date}</p>
-      <p>{item.des}</p>
-      <div>
-        <p>Tasks</p>
-        <p>
-          <CustomInput></CustomInput> <button>Add Task</button>
+    <section>
+      <h2 className="text-2xl font-bold text-stone-700 mb-4">Tasks</h2>
+      <NewTask onAdd={onAdd} />
+      {tasks.length === 0 && (
+        <p className="text-stone-800 my-4">
+          This project does not have any tasks yet.
         </p>
-        <ul>
-          {task &&
-            task.map((item) => {
-              return (
-                <li>
-                  {item}
-                  <button className="focus:text-red-500 active:text-red-500 hover:text-red-500">
-                    Clear
-                  </button>
-                </li>
-              );
-            })}
+      )}
+      {tasks.length > 0 && (
+        <ul className="p-4 mt-8 rounded-md bg-stone-100">
+          {tasks.map((task) => (
+            <li key={task.id} className="flex justify-between my-4">
+              <span>{task.text}</span>
+              <button
+                className="text-stone-700 hover:text-red-500"
+                onClick={() => onDelete(task.id)}
+              >
+                Clear
+              </button>
+            </li>
+          ))}
         </ul>
-      </div>
+      )}
     </section>
   );
 }
-
-export default Tasks;

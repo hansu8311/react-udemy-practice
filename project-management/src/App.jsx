@@ -1,70 +1,128 @@
-import { useRef, useState } from "react";
-import Project from "./components/Project";
-import SideBar from "./components/SideBar";
-import Tasks from "./components/Tasks";
+import { useState } from "react";
+
+import NewProject from "./components/NewProject.jsx";
+import NoProjectSelected from "./components/NoProjectSelected.jsx";
+import ProjectsSidebar from "./components/ProjectsSidebar.jsx";
+import SelectedProject from "./components/SelectedProject.jsx";
 
 function App() {
-  const [pageType, setPageType] = useState("info");
-  const [projectList, setProjectList] = useState([]);
-  const [tasks, setTasks] = useState({});
-  //{seq, tit, des, date}
-  const projectSeq = useRef(null);
-  const projectItem = projectList.find(
-    (item) => item.seq == projectSeq.current
-  );
-  const task = tasks[projectSeq.current];
-  //seq
-  //info
-  //add
-  //update
-  function setTasksHandle(key, val) {
-    setTasks((preTasks) => {
-      const getTask = preTasks.find((item) => item.seq == key) || [];
-      const newTask = [...getTask, val];
+  const [projectsState, setProjectsState] = useState({
+    selectedProjectId: undefined,
+    projects: [],
+    tasks: [],
+  });
+
+  function handleAddTask(text) {
+    setProjectsState((prevState) => {
+      const taskId = Math.random();
+      const newTask = {
+        text: text,
+        projectId: prevState.selectedProjectId,
+        id: taskId,
+      };
+
       return {
-        ...preTasks,
-        [key]: newTask,
+        ...prevState,
+        tasks: [newTask, ...prevState.tasks],
       };
     });
   }
-  function setPageTypeHandle(type) {
-    setPageType(type);
-  }
-  function setProjectListHandle(item) {
-    setProjectList((pre) => {
-      const seq = pre.at(-1)?.seq || 0;
-      setTasks((pre) => {
-        return { ...pre, [seq]: [] };
-      });
-      return [...pre, { seq: seq, ...item }];
+
+  function handleDeleteTask(id) {
+    setProjectsState((prevState) => {
+      return {
+        ...prevState,
+        tasks: prevState.tasks.filter((task) => task.id !== id),
+      };
     });
   }
-  //02640460271192
+
+  function handleSelectProject(id) {
+    setProjectsState((prevState) => {
+      return {
+        ...prevState,
+        selectedProjectId: id,
+      };
+    });
+  }
+
+  function handleStartAddProject() {
+    setProjectsState((prevState) => {
+      return {
+        ...prevState,
+        selectedProjectId: null,
+      };
+    });
+  }
+
+  function handleCancelAddProject() {
+    setProjectsState((prevState) => {
+      return {
+        ...prevState,
+        selectedProjectId: undefined,
+      };
+    });
+  }
+
+  function handleAddProject(projectData) {
+    setProjectsState((prevState) => {
+      const projectId = Math.random();
+      const newProject = {
+        ...projectData,
+        id: projectId,
+      };
+
+      return {
+        ...prevState,
+        selectedProjectId: undefined,
+        projects: [...prevState.projects, newProject],
+      };
+    });
+  }
+
+  function handleDeleteProject() {
+    setProjectsState((prevState) => {
+      return {
+        ...prevState,
+        selectedProjectId: undefined,
+        projects: prevState.projects.filter(
+          (project) => project.id !== prevState.selectedProjectId
+        ),
+      };
+    });
+  }
+
+  const selectedProject = projectsState.projects.find(
+    (project) => project.id === projectsState.selectedProjectId
+  );
+
+  let content = (
+    <SelectedProject
+      project={selectedProject}
+      onDelete={handleDeleteProject}
+      onAddTask={handleAddTask}
+      onDeleteTask={handleDeleteTask}
+      tasks={projectsState.tasks}
+    />
+  );
+
+  if (projectsState.selectedProjectId === null) {
+    content = (
+      <NewProject onAdd={handleAddProject} onCancel={handleCancelAddProject} />
+    );
+  } else if (projectsState.selectedProjectId === undefined) {
+    content = <NoProjectSelected onStartAddProject={handleStartAddProject} />;
+  }
+
   return (
     <main className="h-screen my-8 flex gap-8">
-      <div className="flex flex-1">
-        <SideBar
-          className="flex-1"
-          projectList={projectList}
-          onAddClick={setPageTypeHandle}
-          onProjectClick={(key, type) => {
-            projectSeq.current = key;
-            setPageTypeHandle("update");
-          }}
-        />
-        <div className="flex-auto">
-          {projectItem ? (
-            <Tasks item={projectItem} task={task} setTasks={setTasksHandle} />
-          ) : (
-            <Project
-              type={pageType}
-              seq={projectSeq.current}
-              onNewCick={setPageTypeHandle}
-              onSaveList={setProjectListHandle}
-            />
-          )}
-        </div>
-      </div>
+      <ProjectsSidebar
+        onStartAddProject={handleStartAddProject}
+        projects={projectsState.projects}
+        onSelectProject={handleSelectProject}
+        selectedProjectId={projectsState.selectedProjectId}
+      />
+      {content}
     </main>
   );
 }
