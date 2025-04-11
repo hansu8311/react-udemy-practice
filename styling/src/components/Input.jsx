@@ -35,7 +35,7 @@ export default function CustomInput({ label, invalid, ...props }) {
 
   return (
     <p>
-      <label className={labelClass}>{label}</label>ßß
+      <label className={labelClass}>{label}</label>
       <input className="" {...props} />
     </p>
   );
