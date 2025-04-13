@@ -8,11 +8,11 @@ import logoImg from "./assets/logo.png";
 import { sortPlacesByDistance } from "./loc.js";
 //앱실행 최초에만 실행.
 const storedIds = JSON.parse(localStorage.getItem("selectedPlaces")) || [];
-const storedPlaces = storedIds.map((id) => {
-  AVAILABLE_PLACES.find((place) => place.id === id);
-});
+const storedPlaces = storedIds.map((id) =>
+  AVAILABLE_PLACES.find((place) => place.id === id)
+);
 function App() {
-  const modal = useRef();
+  const [open, setOpen] = useState(false);
   const [availablePlaces, setAvailablePlaces] = useState(AVAILABLE_PLACES);
   const selectedPlace = useRef();
   const [pickedPlaces, setPickedPlaces] = useState(storedPlaces);
@@ -40,12 +40,12 @@ function App() {
   // }, []);
 
   function handleStartRemovePlace(id) {
-    modal.current.open();
+    setOpen(true);
     selectedPlace.current = id;
   }
 
   function handleStopRemovePlace() {
-    modal.current.close();
+    setOpen(false);
   }
 
   function handleSelectPlace(id) {
@@ -71,16 +71,14 @@ function App() {
     setPickedPlaces((prevPickedPlaces) =>
       prevPickedPlaces.filter((place) => place.id !== selectedPlace.current)
     );
-    modal.current.close();
-
+    setOpen(false);
     const storedIds = JSON.parse(localStorage.getItem("selectedPlaces")) || [];
     const filterIds = storedIds.filter((id) => id !== selectedPlace.current);
     localStorage.setItem("selectedPlaces", JSON.stringify(filterIds));
   }
-
   return (
     <>
-      <Modal ref={modal}>
+      <Modal open={open} onClose={handleStopRemovePlace}>
         <DeleteConfirmation
           onCancel={handleStopRemovePlace}
           onConfirm={handleRemovePlace}
