@@ -6,14 +6,19 @@ import Modal from "./components/Modal.jsx";
 import DeleteConfirmation from "./components/DeleteConfirmation.jsx";
 import logoImg from "./assets/logo.png";
 import { sortPlacesByDistance } from "./loc.js";
-
+//앱실행 최초에만 실행.
+const storedIds = JSON.parse(localStorage.getItem("selectedPlaces")) || [];
+const storedPlaces = storedIds.map((id) => {
+  AVAILABLE_PLACES.find((place) => place.id === id);
+});
 function App() {
   const modal = useRef();
   const [availablePlaces, setAvailablePlaces] = useState(AVAILABLE_PLACES);
   const selectedPlace = useRef();
-  const [pickedPlaces, setPickedPlaces] = useState([]);
+  const [pickedPlaces, setPickedPlaces] = useState(storedPlaces);
 
   //사용자 위치
+  //JSX와 관련있는 부수효과
   // [] : 의존성
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -25,6 +30,14 @@ function App() {
       setAvailablePlaces(sortedPlaces);
     });
   }, []);
+
+  // useEffect(() => {
+  //   const storedIds = JSON.parse(localStorage.getItem("selectedPlaces")) || [];
+  //   const storedPlaces = storedIds.map((id) => {
+  //     AVAILABLE_PLACES.find((place) => place.id === id);
+  //   });
+  //   setPickedPlaces(storedPlaces);
+  // }, []);
 
   function handleStartRemovePlace(id) {
     modal.current.open();
@@ -43,6 +56,15 @@ function App() {
       const place = AVAILABLE_PLACES.find((place) => place.id === id);
       return [place, ...prevPickedPlaces];
     });
+
+    //JSX로드와 관련없는 부수효과
+    const storedIds = JSON.parse(localStorage.getItem("selectedPlaces")) || [];
+    if (storedIds.indexOf(id) === -1) {
+      localStorage.setItem(
+        "selectedPlaces",
+        JSON.stringify([id, ...storedIds])
+      );
+    }
   }
 
   function handleRemovePlace() {
@@ -50,6 +72,10 @@ function App() {
       prevPickedPlaces.filter((place) => place.id !== selectedPlace.current)
     );
     modal.current.close();
+
+    const storedIds = JSON.parse(localStorage.getItem("selectedPlaces")) || [];
+    const filterIds = storedIds.filter((id) => id !== selectedPlace.current);
+    localStorage.setItem("selectedPlaces", JSON.stringify(filterIds));
   }
 
   return (
