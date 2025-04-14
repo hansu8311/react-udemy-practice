@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import ProgressBar from "./ProgressBar";
 
-function QuestionTimer({ index, timeout, onTimeOut }) {
+function QuestionTimer({ timeout, onTimeOut, mode }) {
   useEffect(() => {
     const timerId = setTimeout(() => {
       onTimeOut(null);
@@ -11,7 +11,7 @@ function QuestionTimer({ index, timeout, onTimeOut }) {
       clearTimeout(timerId);
     };
   }, [timeout, onTimeOut]);
-  return <ProgressBar index={index} timeout={timeout} />;
+  return <ProgressBar timeout={timeout} mode={mode} />;
 }
 
 export default QuestionTimer;
