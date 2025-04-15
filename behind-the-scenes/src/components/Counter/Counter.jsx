@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 
 import IconButton from "../UI/IconButton.jsx";
 import MinusIcon from "../UI/Icons/MinusIcon.jsx";
@@ -33,6 +33,12 @@ const Counter = memo(function Counter({ initialCount }) {
   );
 
   //const [counter, setCounter] = useState(initialCount);
+  //initialCount 가 초기에 세팅되고나서 이후부터는 무시됨
+  // 1. useEffect
+  // 2. Key 값 재설정
+  // useEffect(() => {
+  //  setCounterChanges({ value: initialCount, id: Math.random() * 1000 });
+  //}, [initialCount]);
   const [counterChanges, setCounterChanges] = useState([
     { value: initialCount, id: Math.random() * 1000 },
   ]);
