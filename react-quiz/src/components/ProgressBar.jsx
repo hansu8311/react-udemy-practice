@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 const INTERVALTIME = 100;
 
-export default function ProgressBar({ index, timeout }) {
+export default function ProgressBar({ timeout, mode }) {
   const [remainingTime, setRemainingTime] = useState(timeout);
 
   useEffect(() => {
@@ -14,5 +14,12 @@ export default function ProgressBar({ index, timeout }) {
       clearInterval(IntervalID);
     };
   }, []);
-  return <progress id="question-time" value={remainingTime} max={timeout} />;
+  return (
+    <progress
+      id="question-time"
+      className={mode}
+      value={remainingTime}
+      max={timeout}
+    />
+  );
 }
