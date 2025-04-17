@@ -3,6 +3,9 @@ import classes from "./User.module.css";
 import React, { Component } from "react";
 //Component를 확장해서 사용했기때문에 props 등 사용가능.
 class User extends Component {
+  componentWillUnmount() {
+    console.log("User Will Unmount");
+  }
   render() {
     return <li className={classes.user}>{this.props.name}</li>;
   }
