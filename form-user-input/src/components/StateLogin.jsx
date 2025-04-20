@@ -4,6 +4,10 @@ export default function Login() {
   //const [enterEmail, setEnterEmail] = useState("");
   //const [enterPassword, setEnterPassword] = useState("");
   const [enterValues, setEnterValues] = useState({ email: "", password: "" });
+  const [didEdit, setDidEdit] = useState({ email: false, password: false });
+
+  const emailIsInvalid = didEdit.email && !enterValues.email.includes("@");
+
   function handleSubmit(e) {
     //form 태그 안에 있는 버튼은 기본적으로 폼 양식을 제출하는 동작을 한다.
     //1. type="button"으로 설정(기본타입 submit)
@@ -27,6 +31,17 @@ export default function Login() {
       ...prevState,
       [e.target.id]: e.target.value,
     }));
+    setDidEdit((prevState) => ({
+      ...prevState,
+      [e.target.id]: false,
+    }));
+  }
+
+  function handleBlur(e) {
+    setDidEdit((prevState) => ({
+      ...prevState,
+      [e.target.id]: true,
+    }));
   }
   return (
     <form onSubmit={handleSubmit}>
@@ -39,9 +54,15 @@ export default function Login() {
             id="email"
             type="email"
             name="email"
+            onBlur={handleBlur}
             onChange={handleInputChange}
             value={enterValues.email}
           />
+          {emailIsInvalid && (
+            <div className="control-error">
+              <p>Please enter Email</p>
+            </div>
+          )}
         </div>
         <div className="control no-margin">
           <label htmlFor="password">Password</label>
@@ -49,6 +70,7 @@ export default function Login() {
             id="password"
             type="password"
             name="password"
+            onBlur={handleBlur}
             onChange={handleInputChange}
             value={enterValues.password}
           />
