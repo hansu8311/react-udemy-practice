@@ -1,6 +1,11 @@
 import { useRef } from "react";
 
 export default function Login() {
+  const [formIsInvalid, setFormIsInvalid] = useState({
+    email: false,
+    password: false,
+  });
+
   const email = useRef();
   const password = useRef();
 
@@ -10,11 +15,17 @@ export default function Login() {
     const enteredEmail = email.current.value;
     const enteredPassword = password.current.value;
 
+    const emailIsInvalid = enteredEmail.includes("@");
+
+    setFormIsInvalid((prevState) => ({ ...prevState, email: emailIsInvalid }));
+
+    if (!emailIsInvalid) return;
+
     console.log("values : ", enteredEmail, enteredPassword);
 
     //Dom 업데이트는 리액트에 맏겨야하므로 추천하지않는 초기화방법이다.
-    email.current.value = "";
-    password.current.value = "";
+    //email.current.value = "";
+    //password.current.value = "";
   }
 
   return (
@@ -25,6 +36,11 @@ export default function Login() {
         <div className="control no-margin">
           <label htmlFor="email">Email</label>
           <input id="email" type="email" name="email" ref={email} />
+          {formIsInvalid.email && (
+            <div className="control-error">
+              <p>Please enter Email</p>
+            </div>
+          )}
         </div>
         <div className="control no-margin">
           <label htmlFor="password">Password</label>
