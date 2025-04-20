@@ -11,6 +11,10 @@ export default function Login() {
     const enteredPassword = password.current.value;
 
     console.log("values : ", enteredEmail, enteredPassword);
+
+    //Dom 업데이트는 리액트에 맏겨야하므로 추천하지않는 초기화방법이다.
+    email.current.value = "";
+    password.current.value = "";
   }
 
   return (

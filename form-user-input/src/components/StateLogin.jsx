@@ -12,6 +12,7 @@ export default function Login() {
     e.preventDefault();
 
     console.log("values : ", enterValues);
+    setEnterValues({ email: "", password: "" });
   }
 
   // function handleEmailChange(e) {
