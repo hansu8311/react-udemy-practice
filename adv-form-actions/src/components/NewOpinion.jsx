@@ -1,66 +1,45 @@
-import { useActionState } from "react";
-import { isNotEmpty } from "../util/validation";
+import { useActionState, use } from "react";
 import { OpinionsContext } from "../store/opinions-context";
-import { use } from "react";
+import Submit from "./Submit";
 
 export function NewOpinion() {
   const { addOpinion } = use(OpinionsContext);
-  function share(prevFormState, formData) {
-    const userName = formData.get("userName");
+  async function share(prevState, formData) {
     const title = formData.get("title");
     const body = formData.get("body");
-    const values = {
-      userName,
-      title,
-      body,
-    };
-    if (!isNotEmpty(userName)) {
-      return {
-        id: "userName",
-        error: "userName empty",
-        values,
-      };
+    const userName = formData.get("userName");
+
+    let errors = [];
+
+    if (title.trim().length < 5) {
+      errors.push("Title must be a least five characters long.");
     }
-    if (!isNotEmpty(title)) {
-      return {
-        id: "title",
-        error: "title empty",
-        values,
-      };
+
+    if (body.trim().length < 10 || body.trim().length > 300) {
+      errors.push("body length check");
     }
-    if (!isNotEmpty(body)) {
-      return {
-        id: "body",
-        error: "body empty",
-        values,
-      };
-    } else {
-      addOpinion({
-        userName,
+
+    if (!userName.trim()) {
+      errors.push("useName  check");
+    }
+
+    if (errors.length > 0) {
+      return { errors, enterdValues: { title, body, userName } };
+    }
+    try {
+      await addOpinion({
         title,
         body,
+        userName,
       });
-      return {
-        values: {
-          userName: "",
-          title: "",
-          body: "",
-        },
-      };
-    }
+    } catch (error) {}
+
+    return { errors: null };
   }
   const [formState, formAction, pending] = useActionState(share, {
-    values: {
-      userName: "",
-      title: "",
-      body: "",
-    },
+    errors: null,
   });
-  const { id, error, values } = formState;
 
-  if (pending) {
-    return <p>....pending</p>;
-  }
   return (
     <div id="new-opinion">
       <h2>Share your opinion!</h2>
@@ -72,20 +51,18 @@ export function NewOpinion() {
               type="text"
               id="userName"
               name="userName"
-              defaultValue={values.userName}
+              defaultValue={formState.enterdValues?.userName}
             />
           </p>
-          {id === "userName" && error && <p className="error">{error}</p>}
           <p className="control">
             <label htmlFor="title">Title</label>
             <input
               type="text"
               id="title"
               name="title"
-              defaultValue={values.title}
+              defaultValue={formState.enterdValues?.title}
             />
           </p>
-          {id === "title" && error && <p className="error">{error}</p>}
         </div>
         <p className="control">
           <label htmlFor="body">Your Opinion</label>
@@ -93,12 +70,18 @@ export function NewOpinion() {
             id="body"
             name="body"
             rows={5}
-            defaultValue={values.body}
+            defaultValue={formState.enterdValues?.body}
           ></textarea>
         </p>
-        {id === "body" && error && <p className="error">{error}</p>}
+        {formState.errors && (
+          <ul className="error">
+            {formState.errors.map((err) => (
+              <li key={err}>{err}</li>
+            ))}
+          </ul>
+        )}
         <p className="actions">
-          <button type="submit">Submit</button>
+          <Submit />
         </p>
       </form>
     </div>
