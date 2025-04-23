@@ -37,13 +37,12 @@ function Checkout() {
     clearData();
   }
 
-  async function handleSubmit(event) {
-    event.preventDefault();
-
-    const fd = new FormData(event.target);
+  async function checkoutAction(fd) {
     const customerData = Object.fromEntries(fd.entries()); // { email: test@example.com }
 
-    sendRequest(JSON.stringify({ order: { items, customer: customerData } }));
+    await sendRequest(
+      JSON.stringify({ order: { items, customer: customerData } })
+    );
   }
 
   let actions = (
@@ -80,11 +79,10 @@ function Checkout() {
 
   return (
     <Modal
-      className=""
       open={progress === "checkout"}
       onClose={progress === "checkout" ? handleHideCheckout : null}
     >
-      <form onSubmit={handleSubmit}>
+      <form action={checkoutAction}>
         <h2>Checkout</h2>
         <p>Total Amount: {currentFormatter.format(cartTotal)}</p>
         <Input label="Full Name" type="text" id="name" />
