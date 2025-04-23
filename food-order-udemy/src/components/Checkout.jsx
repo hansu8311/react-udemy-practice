@@ -7,6 +7,7 @@ import Modal from "./Modal";
 import { use } from "react";
 import useHttp from "./hooks/useHttp";
 import Error from "./Error";
+import { useActionState } from "react";
 
 const requsetConfig = {
   method: "POST",
@@ -22,7 +23,7 @@ function Checkout() {
     (acc, curr) => acc + curr.quantity * curr.price,
     0
   );
-  const { data, isLoading, error, sendRequest, clearData } = useHttp(
+  const { data, error, sendRequest, clearData } = useHttp(
     "http://localhost:3000/orders",
     requsetConfig
   );
@@ -37,13 +38,17 @@ function Checkout() {
     clearData();
   }
 
-  async function checkoutAction(fd) {
+  async function checkoutAction(prevState, fd) {
     const customerData = Object.fromEntries(fd.entries()); // { email: test@example.com }
 
     await sendRequest(
       JSON.stringify({ order: { items, customer: customerData } })
     );
   }
+  const [formState, formAction, isSending] = useActionState(
+    checkoutAction,
+    null
+  );
 
   let actions = (
     <>
@@ -54,7 +59,7 @@ function Checkout() {
     </>
   );
 
-  if (isLoading) {
+  if (isSending) {
     actions = <span>sending....</span>;
   }
 
@@ -82,7 +87,7 @@ function Checkout() {
       open={progress === "checkout"}
       onClose={progress === "checkout" ? handleHideCheckout : null}
     >
-      <form action={checkoutAction}>
+      <form action={formAction}>
         <h2>Checkout</h2>
         <p>Total Amount: {currentFormatter.format(cartTotal)}</p>
         <Input label="Full Name" type="text" id="name" />
