@@ -16,11 +16,13 @@ app.use((req, res, next) => {
 });
 
 app.get("/meals", async (req, res) => {
+  await new Promise((resolve) => setTimeout(resolve, 2000));
   const meals = await fs.readFile("./data/available-meals.json", "utf8");
   res.json(JSON.parse(meals));
 });
 
 app.post("/orders", async (req, res) => {
+  await new Promise((resolve) => setTimeout(resolve, 2000));
   const orderData = req.body.order;
   console.log(orderData);
   if (

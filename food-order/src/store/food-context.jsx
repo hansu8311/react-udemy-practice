@@ -2,7 +2,6 @@ import { createContext, useEffect, useState } from "react";
 import { fetchMeals, postOrder } from "../http";
 
 export const MealsContext = createContext({
-  meals: null,
   orders: null,
   orderTotCnt: 0,
   orderTotPrice: 0,
@@ -13,17 +12,8 @@ export const MealsContext = createContext({
 });
 
 export function FoodContextProvider({ children }) {
-  const [meals, setMeals] = useState();
   const [orders, setOrders] = useState([]);
 
-  useEffect(() => {
-    async function loadMeals() {
-      const data = await fetchMeals();
-      setMeals(data);
-    }
-
-    loadMeals();
-  }, []);
   async function updateOrder(order) {
     const data = await postOrder(order);
 
@@ -86,7 +76,6 @@ export function FoodContextProvider({ children }) {
     ? orders.reduce((acc, curr) => acc + curr.price * curr.cnt, 0).toFixed(2)
     : 0;
   const contextValue = {
-    meals: meals,
     orders: orders,
     orderTotCnt: orders.length,
     orderTotAmt: orderTotAmt,

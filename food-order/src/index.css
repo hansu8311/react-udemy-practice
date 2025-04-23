@@ -60,6 +60,10 @@ h1 {
   grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
   gap: 1rem;
 }
+#meals .fallback-text {
+  text-align: center;
+  color: #ffc404;
+}
 
 .meal-item {
   background-color: #1d1a16;

@@ -5,10 +5,19 @@ import { FoodContextProvider } from "./store/food-context";
 import Modal from "./components/Modal";
 import Cart from "./components/Cart";
 import CheckOutContent from "./components/CheckOutContent";
+import CheckOutComplete from "./components/CheckOutComplete";
+import useFetch from "./hooks/useFetch";
+import { fetchMeals } from "./http";
+import Error from "./components/Error";
 
 function App() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalCOIsOpen, setModalCOIsOpen] = useState(false);
+  const [modalCOCIsOpen, setModalCOCIsOpen] = useState(false);
+  const { fetchedData, setFetchedData, isFetching, error } = useFetch(
+    fetchMeals,
+    []
+  );
 
   function handleOpen() {
     setModalIsOpen(true);
@@ -25,6 +34,13 @@ function App() {
   function handleCOCancel() {
     setModalCOIsOpen(false);
   }
+  function handleCOCOpen() {
+    setModalCOIsOpen(false);
+    setModalCOCIsOpen(true);
+  }
+  function handleCOCCancel() {
+    setModalCOCIsOpen(false);
+  }
   return (
     <FoodContextProvider>
       {modalIsOpen && (
@@ -34,12 +50,25 @@ function App() {
       )}
       {modalCOIsOpen && (
         <Modal open={modalCOIsOpen} onClose={handleCOCancel}>
-          <CheckOutContent onCancel={handleCOCancel} />
+          <CheckOutContent onCancel={handleCOCancel} onOpen={handleCOCOpen} />
+        </Modal>
+      )}
+      {modalCOCIsOpen && (
+        <Modal open={modalCOCIsOpen} onClose={handleCOCCancel}>
+          <CheckOutComplete onOk={handleCOCCancel} />
         </Modal>
       )}
       <Header onCartClick={handleOpen}>ReactFood</Header>
       <main>
-        <Meals />
+        {error && <Error title="An error occurred!" message={error.message} />}
+        {!error && (
+          <Meals
+            meals={fetchedData}
+            fallbackText="no meals"
+            isLoading={isFetching}
+            loadingText="Fetching your meals..."
+          />
+        )}
       </main>
     </FoodContextProvider>
   );

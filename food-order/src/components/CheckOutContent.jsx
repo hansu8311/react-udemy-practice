@@ -5,7 +5,7 @@ import { useFormState } from "react-dom";
 import { isNotEmpty, isEmail } from "../util/validation";
 import SubmitButton from "./SubmitButton";
 
-function CheckOutContent({ onCancel }) {
+function CheckOutContent({ onCancel, onOpen }) {
   const { orderTotAmt, updateOrder, orders } = use(MealsContext);
   const [formState, formFunction, pending] = useFormState(handleCheckOut, {
     name: "",
@@ -81,6 +81,7 @@ function CheckOutContent({ onCancel }) {
     }
     try {
       const data = await updateOrder({ customer, items: orders });
+      onOpen();
     } catch (err) {
       console.log(err);
     }
