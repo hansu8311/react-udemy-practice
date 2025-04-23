@@ -5,10 +5,11 @@ import { currentFormatter } from "../util/formatting";
 import Button from "./UI/Button";
 import { UserProgressContext } from "../store/UserProgressContext";
 import { use } from "react";
+import CartItem from "./CartItem";
 
-function Cart({ oepn }) {
+function Cart() {
   const { items, addItem, removeItem } = use(CartContext);
-  const { progress, hideCart } = use(UserProgressContext);
+  const { progress, hideCart, showCheckout } = use(UserProgressContext);
   const cartTotal = items.reduce(
     (acc, curr) => acc + curr.quantity * curr.price,
     0
@@ -16,28 +17,36 @@ function Cart({ oepn }) {
   function handleHideCart() {
     hideCart();
   }
+  function handleShowCheckout() {
+    showCheckout();
+  }
   return (
-    <>
-      {progress === "cart" && (
-        <Modal className="cart" open={progress === "cart"}>
-          <h2>Your Cart</h2>
-          <ul>
-            {items.map((item) => (
-              <li key={item.id}>
-                {item.name} - {item.quantity}
-              </li>
-            ))}
-          </ul>
-          <p className="cart-total">{currentFormatter.format(cartTotal)}</p>
-          <p className="modal-actions">
-            <Button textOnly onClick={handleHideCart}>
-              Close
-            </Button>
-            <Button>Go to Checkout</Button>
-          </p>
-        </Modal>
-      )}
-    </>
+    <Modal
+      className="cart"
+      open={progress === "cart"}
+      onClose={progress === "cart" ? handleHideCart : null}
+    >
+      <h2>Your Cart</h2>
+      <ul>
+        {items.map((item) => (
+          <CartItem
+            key={item.id}
+            {...item}
+            onIncrease={() => addItem(item)}
+            onDecrease={() => removeItem(item.id)}
+          />
+        ))}
+      </ul>
+      <p className="cart-total">{currentFormatter.format(cartTotal)}</p>
+      <p className="modal-actions">
+        <Button textOnly onClick={handleHideCart}>
+          Close
+        </Button>
+        <Button disabled={items.length === 0} onClick={handleShowCheckout}>
+          Go to Checkout
+        </Button>
+      </p>
+    </Modal>
   );
 }
 

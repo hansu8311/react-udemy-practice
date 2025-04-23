@@ -33,6 +33,7 @@ export function UserProgressContextProvider({ children }) {
     showCheckout,
     hideCheckout,
   };
+  console.log(userProgressContext);
   return (
     <UserProgressContext value={userProgressContext}>
       {children}
