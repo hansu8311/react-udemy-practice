@@ -12,7 +12,6 @@ export function UserProgressContextProvider({ children }) {
   const [userProgress, setUserProgress] = useState("");
 
   function showCart() {
-    console.log("클릭");
     setUserProgress("cart");
   }
 
@@ -33,7 +32,6 @@ export function UserProgressContextProvider({ children }) {
     showCheckout,
     hideCheckout,
   };
-  console.log(userProgressContext);
   return (
     <UserProgressContext value={userProgressContext}>
       {children}

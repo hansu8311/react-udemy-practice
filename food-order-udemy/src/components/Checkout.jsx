@@ -16,33 +16,34 @@ const requsetConfig = {
 };
 
 function Checkout() {
-  const { items } = use(CartContext);
+  const { items, clearCart } = use(CartContext);
   const { progress, hideCheckout } = use(UserProgressContext);
   const cartTotal = items.reduce(
     (acc, curr) => acc + curr.quantity * curr.price,
     0
   );
-  const { data, isLoading, error, sendRequest } = useHttp(
+  const { data, isLoading, error, sendRequest, clearData } = useHttp(
     "http://localhost:3000/orders",
-    requsetConfig,
-    []
+    requsetConfig
   );
 
   function handleHideCheckout() {
     hideCheckout();
+    clearData();
   }
+  function handleFinished() {
+    hideCheckout();
+    clearCart();
+    clearData();
+  }
+
   async function handleSubmit(event) {
     event.preventDefault();
 
     const fd = new FormData(event.target);
+    const customerData = Object.fromEntries(fd.entries()); // { email: test@example.com }
 
-    const customerData = Object.entries(fd.entries());
-
-    try {
-      await sendRequest({ order: { items, customer: customerData } });
-    } catch {}
-
-    const data = await res.json();
+    sendRequest(JSON.stringify({ order: { items, customer: customerData } }));
   }
 
   let actions = (
@@ -57,6 +58,7 @@ function Checkout() {
   if (isLoading) {
     actions = <span>sending....</span>;
   }
+
   if (data && !error) {
     return (
       <Modal
@@ -70,7 +72,7 @@ function Checkout() {
           few minutes.
         </p>
         <p className="modal-actions">
-          <Button onClick={handleHideCheckout}>Okay</Button>
+          <Button onClick={handleFinished}>Okay</Button>
         </p>
       </Modal>
     );

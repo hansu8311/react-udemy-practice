@@ -16,7 +16,11 @@ function useHttp(url, config, initialData) {
   const [data, setData] = useState(initialData);
   const [error, setError] = useState();
   const [isLoading, setIsLoading] = useState(false);
-
+  function clearData() {
+    setIsLoading(false);
+    setError(undefined);
+    setData(initialData);
+  }
   const sendRequest = useCallback(
     async function sendRequest(data) {
       const mergeConfig = {
@@ -25,9 +29,8 @@ function useHttp(url, config, initialData) {
       setIsLoading(true);
 
       if (config.method !== "GET" && data) {
-        mergeConfig.push({ body: data });
+        mergeConfig.body = data;
       }
-
       try {
         const resData = await sendHttpRequest(url, mergeConfig);
         setData(resData);
@@ -44,7 +47,7 @@ function useHttp(url, config, initialData) {
       sendRequest();
   }, [sendRequest]);
 
-  return { data, isLoading, error, sendRequest };
+  return { data, isLoading, error, sendRequest, clearData };
 }
 
 export default useHttp;
