@@ -1,30 +1,12 @@
-import { createSlice, configureStore } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
+import counterReducer from "./counter";
+import authenticationReducer from "./auth";
 
-const initialState = { counter: 0, showCounter: false };
-
-const counterSlice = createSlice({
-  name: "counter",
-  initialState: initialState,
-  reducers: {
-    increment(state) {
-      //immer 라이브러리를 사용하여 나중에 복사하여 변경처리한다.
-      state.counter++;
-    },
-    decrement(state) {
-      state.counter--;
-    },
-    increse(state, action) {
-      state.counter = state.counter + action.payload.amount;
-    },
-    toggle(state) {
-      state.showCounter = !state.showCounter;
-    },
+const store = configureStore({
+  reducer: {
+    counter: counterReducer,
+    auth: authenticationReducer,
   },
 });
 
-const store = configureStore({
-  reducer: counterSlice.reducer,
-});
-
-export const counterActions = counterSlice.actions;
 export default store;

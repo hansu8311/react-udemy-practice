@@ -1,12 +1,12 @@
 import { useSelector, useDispatch } from "react-redux";
 import classes from "./Counter.module.css";
-import { counterActions } from "../store";
+import { counterActions } from "../store/counter";
 
 const Counter = () => {
   const dispatch = useDispatch();
-  const [counter, showCounter] = useSelector((state) => [
-    state.counter,
-    state.showCounter,
+  const [counter, showCounter] = useSelector(({ counter }) => [
+    counter.counter,
+    counter.showCounter,
   ]); //자동으로 subscribe 한다.
   const toggleCounterHandler = () => {
     dispatch(counterActions.toggle());
