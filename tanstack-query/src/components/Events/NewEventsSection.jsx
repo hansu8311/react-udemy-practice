@@ -8,8 +8,8 @@ export default function NewEventsSection() {
   //queryKey : 키를 캐싱을 관리한다.
   //queryFn : promise 를 반환하는 함수.
   const { data, isPending, isError, error } = useQuery({
-    queryKey: ["events", { search: "" }],
-    queryFn: fetchEvents,
+    queryKey: ["events", { max: 3 }],
+    queryFn: ({ signal, queryKey }) => fetchEvents({ signal, ...queryKey[1] }),
     staleTime: 1 * 5 * 1000,
     //gcTime: 5 * 60 * 1000, //캐싱 제거하는 시간 default : 5분
   });
