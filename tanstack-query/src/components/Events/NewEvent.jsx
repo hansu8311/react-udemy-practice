@@ -2,9 +2,9 @@ import { Link, useNavigate } from "react-router-dom";
 
 import Modal from "../UI/Modal.jsx";
 import EventForm from "./EventForm.jsx";
-import { useMutation } from "../../../node_modules/@tanstack/react-query/src/useMutation";
 import { createNewEvent, queryClient } from "../../util/http.js";
 import ErrorBlock from "../UI/ErrorBlock.jsx";
+import { useMutation } from "@tanstack/react-query";
 
 export default function NewEvent() {
   const navigate = useNavigate();
