@@ -28,6 +28,8 @@ export async function saveMeal(meal) {
       throw new Error("Saving image failed!");
     }
   });
+  //nextjs에서 빌드시 .next로 파일을 옮긴다 그래서 런타임에 public에 저장된 파일 이미지를 불러오지 못한다.
+  //런타임시 생선된 파일은 AWS S3등 에 저장을 해야함.
 
   meal.image = `/images/${fileName}`;
 
