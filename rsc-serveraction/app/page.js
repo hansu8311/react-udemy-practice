@@ -13,7 +13,8 @@ export default async function Home() {
     setTimeout(async () => {
       const data = await fs.readFile("dummy-db.json", "utf-8");
       const users = JSON.parse(data);
-      resolve(users);
+      // resolve(users);
+      reject(new Error("Error!"));
     }, 2000)
   );
   return (
@@ -24,9 +25,11 @@ export default async function Home() {
       </ClientDemo>
       <DataFetchingDemo></DataFetchingDemo>
       <ServerActionsDemo></ServerActionsDemo>
-      <Suspense fallback={<p>Loading users...</p>}>
-        <UsePromiseDemo usersPromise={fetchUsersPromise} />
-      </Suspense>
+      <ErrorBoundary fallback={<p>Something went wrong!</p>}>
+        <Suspense fallback={<p>Loading users...</p>}>
+          <UsePromiseDemo usersPromise={fetchUsersPromise} />
+        </Suspense>
+      </ErrorBoundary>
     </main>
   );
 }
