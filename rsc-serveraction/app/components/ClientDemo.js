@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+//import RSCDemo from "./RSCDemo";
 
 export default function ClientDemo({ children }) {
   const [count, setCount] = useState(0); // <- this is why it's a client component
@@ -12,6 +13,7 @@ export default function ClientDemo({ children }) {
       <p>
         Will be rendered on the client <strong>AND</strong> the server.
       </p>
+      {/* <RSCDemo></RSCDemo> 클라이언트 컴포넌트 안에 직접 임포트 불가. */}
       {children}
     </div>
   );
