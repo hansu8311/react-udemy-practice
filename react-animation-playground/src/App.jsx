@@ -13,6 +13,8 @@ function App() {
         animate={{ x, y, rotate }}
         transition={{
           duration: 3,
+          //bounce: 1,
+          type: "spring",
         }}
       />
 
