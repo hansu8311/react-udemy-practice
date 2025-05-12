@@ -33,3 +33,11 @@ union = 123;
 
 //타입별칭
 type Person = { name: string; age: number };
+
+//함수와 타입
+function add2(a: number, b: number): number {
+  return a + b;
+}
+function printOutput(value: any): void {
+  console.log(value);
+}
