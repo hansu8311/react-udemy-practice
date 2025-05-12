@@ -1,0 +1,27 @@
+//기본타입
+//number
+//string
+//boolean
+//null
+//undifined
+let age: number = 3;
+
+let useName: string = "hansukim";
+
+let isInstructor: boolean = false;
+
+//복잡한 자료형
+//배열
+//오브젝트
+let hobbies: string[] = ["cooking", "sports"];
+
+let person: { name: string; age: number } = { name: "MAX", age: 32 };
+
+let peopel: { name: string; age: number }[] = [
+  { name: "MAX", age: 32 },
+  { name: "MINI", age: 33 },
+];
+
+//타입추론
+//변수를 만들고나서 초기값을 할당시 타입스크립트에서 타입추론을 하여서 타입을 세팅한다.
+let course = 1; // course : number 타입으로 추론
