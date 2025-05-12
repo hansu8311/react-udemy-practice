@@ -25,3 +25,8 @@ let peopel: { name: string; age: number }[] = [
 //타입추론
 //변수를 만들고나서 초기값을 할당시 타입스크립트에서 타입추론을 하여서 타입을 세팅한다.
 let course = 1; // course : number 타입으로 추론
+
+//유니온타입
+let union: string | number = "union type!";
+
+union = 123;
