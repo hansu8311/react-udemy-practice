@@ -15,9 +15,9 @@ let isInstructor: boolean = false;
 //오브젝트
 let hobbies: string[] = ["cooking", "sports"];
 
-let person: { name: string; age: number } = { name: "MAX", age: 32 };
+let person: Person = { name: "MAX", age: 32 };
 
-let peopel: { name: string; age: number }[] = [
+let peopel: Person[] = [
   { name: "MAX", age: 32 },
   { name: "MINI", age: 33 },
 ];
@@ -30,3 +30,6 @@ let course = 1; // course : number 타입으로 추론
 let union: string | number = "union type!";
 
 union = 123;
+
+//타입별칭
+type Person = { name: string; age: number };
