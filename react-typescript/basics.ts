@@ -41,3 +41,14 @@ function add2(a: number, b: number): number {
 function printOutput(value: any): void {
   console.log(value);
 }
+
+//제네릭
+function insertAtBeginning<T>(array: T[], value: T): T[] {
+  const newArray = [value, ...array];
+  return newArray;
+}
+
+const demoArray = [1, 2, 3];
+
+const updateArray = insertAtBeginning(demoArray, -1);
+const stringArray = insertAtBeginning(["1", "2", "3"], "-1");
