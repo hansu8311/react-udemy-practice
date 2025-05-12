@@ -1,11 +1,16 @@
 import { useState } from "react";
+import Output from "./Output";
 
 function Greeting() {
   const [chanageText, setChangeText] = useState(false);
   return (
     <div>
       <h2>Hello World!</h2>
-      {chanageText ? <p>Changed!</p> : <p>It's good to see you!</p>}
+      {chanageText ? (
+        <Output>Changed!</Output>
+      ) : (
+        <Output>It's good to see you!</Output>
+      )}
       <button
         onClick={() => {
           setChangeText(true);
