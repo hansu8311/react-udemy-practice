@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -20,7 +16,32 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src"]
 }
+
+// {
+//   "compilerOptions": {
+//     "target": "es5", //자바스크립트 어떤 버젼으로 변환할것인가?
+//     "lib": [
+//       "dom",//HTMLInputElement 등 DOM 타입
+//       "dom.iterable",//
+//       "esnext"
+//     ],//타입스크립트 라이브러리
+//     "allowJs": true,
+//     "skipLibCheck": true,
+//     "esModuleInterop": true,
+//     "allowSyntheticDefaultImports": true,
+//     "strict": true,//엄격한 타입스크립트, 묵시적 any 설정 불가.
+//     "forceConsistentCasingInFileNames": true,
+//     "noFallthroughCasesInSwitch": true,
+//     "module": "esnext",
+//     "moduleResolution": "node",
+//     "resolveJsonModule": true,
+//     "isolatedModules": true,
+//     "noEmit": true,
+//     "jsx": "react-jsx"
+//   },
+//   "include": [
+//     "src"
+//   ]
+// }
